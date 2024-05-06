@@ -1,0 +1,33 @@
+.blog-post-meta-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.blog-post-meta-paragraph {
+  margin-right: 10px;
+}
+
+.author-name {
+  margin: 0;
+  margin-top: 25px;
+  margin-left: 15px;
+}
+
+.my-notes-title {
+  text-decoration: underline;
+  color: #202020d0; /* Lighter color */
+  text-align: center;
+}
+
+#amazon-paragraph {
+  font-size: larger;
+}
+
+footer {
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}

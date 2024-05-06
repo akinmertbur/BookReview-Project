@@ -41,7 +41,7 @@ app.get("/", async (req, res) => {
 app.get("/details/:id", async (req, res) => {
   const book_id = req.params.id;
   const result = await db.query(
-    "SELECT review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
+    "SELECT book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
     [book_id]
   );
   const review_details = result.rows[0];

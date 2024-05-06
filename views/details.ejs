@@ -1,7 +1,29 @@
 <%- include('partials/header.ejs'); -%>
-<h2><%= details.book_id %></h2>
-<p><%= details.review %></p>
-<p><%= details.notes %></p>
-<h2><%= details.date_read %></h2>
-<h2><%= details.recommendation_score %></h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <article class="blog-post">
+              <div class="blog-post-meta-container">
+                <h2 class="display-5 link-body-emphasis mb-1"><%= details.title %></h2>
+                <p class="author-name">- by <a href="https://en.wikipedia.org/wiki/<%= details.author %>"><%= details.author %></a></p>
+              </div>
+              <div class="blog-post-meta-container">
+                <p class="blog-post-meta blog-post-meta-paragraph">DATE READ: <%= details.date_read.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) %> </p>
+                <p class="blog-post-meta blog-post-meta-paragraph">|</p>
+                <p class="blog-post-meta blog-post-meta-paragraph">ISBN: <%= details.key_value %> </p>
+                <p class="blog-post-meta blog-post-meta-paragraph">|</p>
+                <p class="blog-post-meta blog-post-meta-paragraph">How strongly I recommend it: <%= details.recommendation_score %>/10 </p>
+              </div>
+              <p id="amazon-paragraph">Go to the <a href="https://www.amazon.com/s?k=<%= details.key_value %>">Amazon page</a> for details and reviews.</p>
+              <hr>
+              <p><%= details.review %></p>
+              <hr>
+              <h2 class="my-notes-title">My Notes</h2>
+              <p><%= details.notes %></p>
+            </article>      
+          </div>
+    </div>
+</div>
+
 <%- include('partials/footer.ejs'); -%>
