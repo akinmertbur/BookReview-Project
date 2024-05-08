@@ -73,15 +73,21 @@ app.get("/", async (req, res) => {
   });
 });
 
-// Route to handle showing review details for sp
-// using Path Parameters.
+// Route to handle showing review details for a specific book using Path Parameters.
 app.get("/details/:id", async (req, res) => {
+  // Extract the book ID from the request parameters.
   const book_id = req.params.id;
+
+  // Query the database to fetch review details for the specified book ID.
   const result = await db.query(
     "SELECT book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
     [book_id]
   );
+
+  // Extract the review details from the query result.
   const review_details = result.rows[0];
+
+  // Render the details page with the review details.
   res.render("details.ejs", {
     details: review_details,
   });
@@ -95,6 +101,10 @@ app.get("/details", async (req, res) => {
   res.redirect("/");
 });
 */
+
+app.get("/addBookPage", async (req, res) => {
+  res.render("new_book.ejs");
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

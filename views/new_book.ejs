@@ -1,0 +1,18 @@
+<%- include('partials/header.ejs'); -%>
+
+<div class="add-book">
+    <div class="form-title">
+        <h2>Add New Book</h2>
+    </div>
+    <form action="/addBook" method="POST">
+        <input type="text" name="title" placeholder="Title" autocomplete="off" autofocus="true">
+        <input type="text" name="author" placeholder="Author" autocomplete="off" autofocus="true">
+        <textarea name="review" placeholder="Review" autocomplete="off" autofocus="true"></textarea>
+        <textarea name="notes" placeholder="Notes" autocomplete="off" autofocus="true"></textarea>
+        <input type="text" name="recommendation_score" placeholder="Score" autocomplete="off" autofocus="true">
+        <input type="text" name="key_value" placeholder="Key Value" autocomplete="off" autofocus="true">
+        <button type="submit" name="add">Add</button>
+    </form>
+</div>
+
+<%- include('partials/footer.ejs'); -%>
