@@ -28,6 +28,30 @@
 footer {
   flex: 0 0 auto;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 40px;
   margin-bottom: 10px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  min-height: 100vh;
+  background-color: beige;
+}
+main {
+  flex: 1 0 auto;
+}
+
+#summary-text {
+  margin-top: 30px;
+}
+
+.summary-paragraph {
+  margin-bottom: 20px;
+}
+
+.container {
+  margin-top: 10px;
+  margin-bottom: 20px;
 }

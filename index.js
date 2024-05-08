@@ -29,7 +29,9 @@ let books = [];
 
 // Route for the homepage.
 app.get("/", async (req, res) => {
-  const result = await db.query("SELECT * FROM book");
+  const result = await db.query(
+    "SELECT book.id, book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id"
+  );
   books = result.rows;
   res.render("index.ejs", {
     bookList: books,
