@@ -27,12 +27,47 @@ app.use(express.static("public"));
 // Initialize an empty array to store books.
 let books = [];
 
+// Function to fetch books based on sorting criteria.
+async function getBooks(sort) {
+  let result;
+  // Check if there is a sorting parameter provided.
+  if (sort) {
+    // Determine the sorting criteria.
+    if (sort === "rating") {
+      // Sort by rating in descending order.
+      result = await db.query(
+        "SELECT book.id, book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id ORDER BY review.recommendation_score DESC;"
+      );
+    } else if (sort === "date") {
+      // Sort by date read in descending order.
+      result = await db.query(
+        "SELECT book.id, book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id ORDER BY review.date_read DESC;"
+      );
+    } else {
+      // Sort by title in ascending order.
+      result = await db.query(
+        "SELECT book.id, book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id ORDER BY book.title ASC;"
+      );
+    }
+  } else {
+    // If no sorting parameter is provided, fetch all books.
+    result = await db.query(
+      "SELECT book.id, book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id"
+    );
+  }
+
+  return result;
+}
+
 // Route for the homepage.
 app.get("/", async (req, res) => {
-  const result = await db.query(
-    "SELECT book.id, book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id"
-  );
+  // Call the getBooks function to fetch books based on sorting criteria.
+  const result = await getBooks(req.query.sort);
+
+  // Extract the rows from the query result.
   books = result.rows;
+
+  // Render the index page with the list of books.
   res.render("index.ejs", {
     bookList: books,
   });
