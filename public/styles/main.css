@@ -146,3 +146,23 @@ nav a:hover {
   justify-content: center;
   margin-bottom: 20px;
 }
+
+.edit {
+  display: flex;
+  justify-content: end;
+}
+.edit a {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none;
+}
+
+.edit a:hover {
+  background-color: #45a049;
+}

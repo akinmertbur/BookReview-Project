@@ -177,6 +177,32 @@ app.post("/addBook", async (req, res) => {
   res.redirect("/");
 });
 
+app.get("/editBookPage", async (req, res) => {
+  const id = req.query.id;
+  const result = await db.query(
+    "SELECT book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
+    [id]
+  );
+
+  res.render("edit_book.ejs", {
+    details: result.rows[0],
+  });
+});
+
+app.post("/editBook", async (req, res) => {
+  const book_id = req.body.book_id;
+  const review = req.body.review;
+  const notes = req.body.notes;
+  const recommendation_score = req.body.recommendation_score;
+
+  await db.query(
+    "UPDATE review SET review = $1, notes = $2, recommendation_score = $3 WHERE book_id = $4;",
+    [review, notes, recommendation_score, book_id]
+  );
+
+  res.redirect(`/details/${encodeURIComponent(book_id)}`);
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

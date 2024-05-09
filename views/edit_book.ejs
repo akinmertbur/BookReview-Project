@@ -1,0 +1,16 @@
+<%- include('partials/header.ejs'); -%>
+
+<div class="add-book">
+    <div class="form-title">
+        <h2>Edit the Book</h2>
+    </div>
+    <form action="/editBook" method="POST">
+        <input type="hidden" name="book_id" value="<%= details.book_id %>">
+        <textarea name="review" autofocus="true"><%= details.review %></textarea>
+        <textarea name="notes" autocomplete="off" autofocus="true"><%= details.notes %></textarea>
+        <input type="text" name="recommendation_score" value='<%= details.recommendation_score %>' autocomplete="off" autofocus="true">
+        <button type="submit" name="add">Edit</button>
+    </form>
+</div>
+
+<%- include('partials/footer.ejs'); -%>
