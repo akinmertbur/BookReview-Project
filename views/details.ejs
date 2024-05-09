@@ -22,6 +22,9 @@
               <p><%= details.notes %></p>
               <div class="edit">
                 <a href="/editBookPage?id=<%= details.book_id %>">Edit</a>
+                <form action="/delete" method="POST">
+                  <button type="submit" name="delete" value="<%= details.book_id %>">Delete</button>
+                </form>
               </div>
             </article>      
           </div>

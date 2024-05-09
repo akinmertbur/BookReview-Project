@@ -112,6 +112,56 @@ async function addBook(
   }
 }
 
+// Function to fetch details of a book including its reviews.
+async function getBookDetails(book_id) {
+  try {
+    // Query the database to fetch review details for the specified book ID.
+    const result = await db.query(
+      "SELECT book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
+      [book_id]
+    );
+
+    // Return the details of the book and its reviews.
+    return result.rows[0];
+  } catch (error) {
+    // Log the error if any occurred.
+    console.error("Error fetching item from database:", error);
+    // Optionally, handle the error by retrying the operation or notifying the user.
+    return null;
+  }
+}
+
+// Function to update review details of a book in the database.
+async function updateBookDetails(review, notes, recommendation_score, book_id) {
+  try {
+    // Update the review details in the database.
+    await db.query(
+      "UPDATE review SET review = $1, notes = $2, recommendation_score = $3 WHERE book_id = $4;",
+      [review, notes, recommendation_score, book_id]
+    );
+  } catch (error) {
+    // Log the error if any occurred.
+    console.error("Error updating item in database:", error);
+    // Optionally, handle the error by retrying the operation or notifying the user.
+    return null;
+  }
+}
+
+// Function to delete a book and its associated reviews from the database.
+async function deleteBook(id) {
+  try {
+    // Delete reviews associated with the book.
+    await db.query("DELETE FROM review WHERE book_id = $1", [id]);
+    // Delete the book itself.
+    await db.query("DELETE FROM book WHERE id = $1", [id]);
+  } catch (error) {
+    // Log the error if any occurred.
+    console.error("Error deleting item from database:", error);
+    // Optionally, handle the error by retrying the operation or notifying the user.
+    return null;
+  }
+}
+
 // Route for the homepage.
 app.get("/", async (req, res) => {
   // Call the getBooks function to fetch books based on sorting criteria.
@@ -131,14 +181,8 @@ app.get("/details/:id", async (req, res) => {
   // Extract the book ID from the request parameters.
   const book_id = req.params.id;
 
-  // Query the database to fetch review details for the specified book ID.
-  const result = await db.query(
-    "SELECT book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
-    [book_id]
-  );
-
-  // Extract the review details from the query result.
-  const review_details = result.rows[0];
+  // Extract the review details for the specified book ID.
+  const review_details = await getBookDetails(book_id);
 
   // Render the details page with the review details.
   res.render("details.ejs", {
@@ -177,30 +221,45 @@ app.post("/addBook", async (req, res) => {
   res.redirect("/");
 });
 
+// Route to render the page for editing book details.
 app.get("/editBookPage", async (req, res) => {
+  // Extract the book ID from the query parameters.
   const id = req.query.id;
-  const result = await db.query(
-    "SELECT book.title, book.author, book.key_value, review.book_id, review.review, review.notes, review.date_read, review.recommendation_score FROM book INNER JOIN review ON book.id = review.book_id WHERE book.id = ($1)",
-    [id]
-  );
 
+  // Extract the review details for the specified book ID.
+  const review_details = await getBookDetails(id);
+
+  // Render the edit book page with the review details.
   res.render("edit_book.ejs", {
-    details: result.rows[0],
+    details: review_details,
   });
 });
 
+// Route to handle the POST request for updating book details.
 app.post("/editBook", async (req, res) => {
+  // Extract data from the request body.
   const book_id = req.body.book_id;
   const review = req.body.review;
   const notes = req.body.notes;
   const recommendation_score = req.body.recommendation_score;
 
-  await db.query(
-    "UPDATE review SET review = $1, notes = $2, recommendation_score = $3 WHERE book_id = $4;",
-    [review, notes, recommendation_score, book_id]
-  );
+  // Update the review details of the book in the database.
+  await updateBookDetails(review, notes, recommendation_score, book_id);
 
+  // Redirect the user to the details page of the edited book.
   res.redirect(`/details/${encodeURIComponent(book_id)}`);
+});
+
+// Route to handle the POST request for deleting a book.
+app.post("/delete", async (req, res) => {
+  // Extract the ID of the book to be deleted from the request body.
+  const book_id = req.body.delete;
+
+  // Call the deleteBook function to delete the book and its reviews.
+  await deleteBook(book_id);
+
+  // Redirect the user to the homepage after deleting the book.
+  res.redirect("/");
 });
 
 app.listen(port, () => {

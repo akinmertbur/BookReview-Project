@@ -126,7 +126,7 @@ nav a:hover {
   resize: vertical;
 }
 
-.add-book button {
+button {
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
@@ -137,7 +137,7 @@ nav a:hover {
   transition: background-color 0.3s;
 }
 
-.add-book button:hover {
+button:hover {
   background-color: #45a049;
 }
 
@@ -149,7 +149,8 @@ nav a:hover {
 
 .edit {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
+  margin-top: 40px;
 }
 .edit a {
   padding: 12px 20px;
