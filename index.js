@@ -76,7 +76,6 @@ async function getBookId(title) {
   } catch (error) {
     // Log the error if any occurred.
     console.error("Error fetching item from database:", error);
-    // Optionally, handle the error by retrying the operation or notifying the user.
     return null;
   }
 }
@@ -108,7 +107,6 @@ async function addBook(
   } catch (error) {
     // Log the error if any occurred.
     console.error("Error adding item to database:", error);
-    // Optionally, handle the error by retrying the operation or notifying the user.
     return null;
   }
 }
@@ -127,7 +125,6 @@ async function getBookDetails(book_id) {
   } catch (error) {
     // Log the error if any occurred.
     console.error("Error fetching item from database:", error);
-    // Optionally, handle the error by retrying the operation or notifying the user.
     return null;
   }
 }
@@ -143,7 +140,6 @@ async function updateBookDetails(review, notes, recommendation_score, book_id) {
   } catch (error) {
     // Log the error if any occurred.
     console.error("Error updating item in database:", error);
-    // Optionally, handle the error by retrying the operation or notifying the user.
     return null;
   }
 }
@@ -158,7 +154,6 @@ async function deleteBook(id) {
   } catch (error) {
     // Log the error if any occurred.
     console.error("Error deleting item from database:", error);
-    // Optionally, handle the error by retrying the operation or notifying the user.
     return null;
   }
 }
@@ -205,6 +200,24 @@ async function getCovers() {
   }
 }
 
+// Function to get the key value (ISBN) of a book by its ID.
+async function getKeyValueById(id) {
+  try {
+    // Query the database to fetch the key value of the book with the given ID.
+    const result = await db.query(
+      "SELECT key_value FROM book WHERE id = ($1)",
+      [id]
+    );
+
+    // Return the key value (ISBN) of the book.
+    return result.rows[0].key_value;
+  } catch (error) {
+    // Log the error if any occurred.
+    console.error("Error fetching item from database:", error);
+    return null;
+  }
+}
+
 // Route to render the homepage with the list of books and their covers.
 app.get("/", async (req, res) => {
   try {
@@ -237,9 +250,16 @@ app.get("/details/:id", async (req, res) => {
   // Extract the review details for the specified book ID.
   const review_details = await getBookDetails(book_id);
 
-  // Render the details page with the review details.
+  // Get the key value (ISBN) of the book.
+  const key_value = await getKeyValueById(book_id);
+
+  // Fetch cover data for the book.
+  const coverData = await getCover(key_value);
+
+  // Render the details page with the review details and cover data.
   res.render("details.ejs", {
     details: review_details,
+    coverData: coverData,
   });
 });
 
