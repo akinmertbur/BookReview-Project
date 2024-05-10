@@ -19,14 +19,14 @@
       </div>
     </div>
   </div>
-  <% for( let i = 0; i < bookList.length; i++ ) { %>
+  <% for ( let i = 0; i < bookList.length; i++ ) { %>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <article class="blog-post">
                   <div class="blog-post-meta-container">
                     <img id="book-cover" src="data:image/jpeg;base64,<%= covers[i] %>" alt="Book Cover">
-                    <h2 class="display-5 link-body-emphasis mb-1"><%= bookList[i].title %></h2>
+                    <h2 class="display-5 link-body-emphasis mb-1 book-title"><%= bookList[i].title %></h2>
                     <p class="author-name">- by <a href="https://en.wikipedia.org/wiki/<%= bookList[i].author %>"><%= bookList[i].author %></a></p>
                   </div>
                   <div class="blog-post-meta-container">

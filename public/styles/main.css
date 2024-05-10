@@ -1,12 +1,20 @@
 .blog-post-meta-container {
   display: flex;
   align-items: center;
-  margin-top: 10px;
-  justify-content: center;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.book-title {
+  text-align: center;
+}
+
+.blog-post-meta-container img {
+  margin-right: 10px;
 }
 
 .blog-post-meta-paragraph {
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .author-name {
@@ -22,6 +30,7 @@
 }
 
 #amazon-paragraph {
+  margin-top: 5px;
   font-size: larger;
 }
 
