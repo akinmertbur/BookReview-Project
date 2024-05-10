@@ -2,6 +2,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -162,18 +163,70 @@ async function deleteBook(id) {
   }
 }
 
-// Route for the homepage.
+// Function to fetch cover image for a book using its ISBN.
+async function getCover(key_value) {
+  try {
+    // Fetch cover image for each book using its ISBN.
+    const coverResponse = await axios.get(
+      `https://covers.openlibrary.org/b/isbn/${key_value}-M.jpg`,
+      { responseType: "arraybuffer" }
+    );
+    // Convert cover image data to base64 format.
+    const coverData = Buffer.from(coverResponse.data, "binary").toString(
+      "base64"
+    );
+
+    return coverData;
+  } catch (error) {
+    // Log error if fetching cover fails.
+    console.error("Failed to fetch cover:", error.message);
+    return null;
+  }
+}
+
+// Function to fetch book covers from Open Library API.
+async function getCovers() {
+  try {
+    // Use map instead of forEach to create an array of promises.
+    const coverPromises = books.map(async (book) => {
+      // Await the result of getCover inside the map function.
+      const coverData = await getCover(book.key_value);
+      return coverData;
+    });
+
+    // Wait for all promises to resolve.
+    const covers = await Promise.all(coverPromises);
+
+    return covers;
+  } catch (error) {
+    // Log error if fetching covers fails.
+    console.error("Failed to make request:", error.message);
+    return null;
+  }
+}
+
+// Route to render the homepage with the list of books and their covers.
 app.get("/", async (req, res) => {
-  // Call the getBooks function to fetch books based on sorting criteria.
-  const result = await getBooks(req.query.sort);
+  try {
+    // Call the getBooks function to fetch books based on sorting criteria.
+    const result = await getBooks(req.query.sort);
 
-  // Extract the rows from the query result.
-  books = result.rows;
+    // Extract the rows from the query result.
+    books = result.rows;
 
-  // Render the index page with the list of books.
-  res.render("index.ejs", {
-    bookList: books,
-  });
+    // Fetch covers for the books.
+    const covers = await getCovers();
+
+    // Render the index page with the list of books and their covers.
+    res.render("index.ejs", {
+      bookList: books,
+      covers: covers,
+    });
+  } catch (error) {
+    // Log error and send internal server error response if something goes wrong.
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Route to handle showing review details for a specific book using Path Parameters.

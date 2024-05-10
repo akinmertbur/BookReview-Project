@@ -19,31 +19,32 @@
       </div>
     </div>
   </div>
-  <% bookList.forEach(book => { %>
+  <% for( let i = 0; i < bookList.length; i++ ) { %>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <article class="blog-post">
                   <div class="blog-post-meta-container">
-                    <h2 class="display-5 link-body-emphasis mb-1"><%= book.title %></h2>
-                    <p class="author-name">- by <a href="https://en.wikipedia.org/wiki/<%= book.author %>"><%= book.author %></a></p>
+                    <img id="book-cover" src="data:image/jpeg;base64,<%= covers[i] %>" alt="Book Cover">
+                    <h2 class="display-5 link-body-emphasis mb-1"><%= bookList[i].title %></h2>
+                    <p class="author-name">- by <a href="https://en.wikipedia.org/wiki/<%= bookList[i].author %>"><%= bookList[i].author %></a></p>
                   </div>
                   <div class="blog-post-meta-container">
-                    <p class="blog-post-meta blog-post-meta-paragraph">DATE READ: <%= book.date_read.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) %> </p>
+                    <p class="blog-post-meta blog-post-meta-paragraph">DATE READ: <%= bookList[i].date_read.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) %> </p>
                     <p class="blog-post-meta blog-post-meta-paragraph">|</p>
-                    <p class="blog-post-meta blog-post-meta-paragraph">ISBN: <%= book.key_value %> </p>
+                    <p class="blog-post-meta blog-post-meta-paragraph">ISBN: <%= bookList[i].key_value %> </p>
                     <p class="blog-post-meta blog-post-meta-paragraph">|</p>
-                    <p class="blog-post-meta blog-post-meta-paragraph">How strongly I recommend it: <%= book.recommendation_score %>/10 </p>
+                    <p class="blog-post-meta blog-post-meta-paragraph">How strongly I recommend it: <%= bookList[i].recommendation_score %>/10 </p>
                   </div>
-                  <p id="amazon-paragraph">Read <a href="/details/<%= encodeURIComponent(book.id) %>">my notes</a>, or Go to the <a href="https://www.amazon.com/s?k=<%= book.key_value %>">Amazon page</a> for details and reviews.</p>
+                  <p id="amazon-paragraph">Read <a href="/details/<%= encodeURIComponent(bookList[i].id) %>">my notes</a>, or Go to the <a href="https://www.amazon.com/s?k=<%= bookList[i].key_value %>">Amazon page</a> for details and reviews.</p>
                   <hr>
-                  <p><%= book.review %></p>
+                  <p><%= bookList[i].review %></p>
                   <hr>
                 </article>      
               </div>
         </div>
     </div>
-  <% }) %>  
+  <% } %>  
 <% } %>
 
 <%- include('partials/footer.ejs'); -%>
