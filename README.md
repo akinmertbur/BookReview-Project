@@ -54,7 +54,7 @@ This project is a Book Review Management System built using Node.js and Express.
 
 ### Viewing Book Details
 
-* Click on the "my notes" button from the homepage to view its details.
+* Click on the 'My Notes' button for each book on the homepage to view its details.
 * The details page includes the book's title, author, review, notes, date read, recommendation score, and cover image.
 
 ### Editing Book Details
